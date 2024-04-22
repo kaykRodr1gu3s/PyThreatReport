@@ -69,15 +69,44 @@
     ```
   + [Misp images](https://github.com/misp/misp-docker) to build on container.
     ```git
-
+    mkdir documents
     git clone https://github.com/misp/misp-docker
     ```
 
 
 
 
-### Misp on DOcker configuration
-  After that you create your Linux enviroment and configure with your credencial, let's execute your misp image!
+### Misp on Docker configuration
+  After that you create your Linux enviroment and configure with your credencial, let's execute your misp on docker!
+  ```
+  cd documents/misp-docker
+  cp template.env .env
+  sudo docker-compose build
+  sudo docker-compose up
+
+  ```
+  copy and paste these command on command line.
+
+  when the command over, go to your browser and open this url ```https://localhost```, accept the risk and continue.
+  when open the localhost, the misp email is `admin@admin.test` the password is `admin`.
+
+  + Organisation
+    
+    For create a new organisation, go to Administration > Add Organisations. Fill with your datas
+
+    
+  + User
+    
+    For create a new user, go to Administration > Add User
+
+  + Api key
+
+    For you create a Api key, go to Administration > list User on action section, go to view. When click on view option, you will scroll down and click on auth key.  
+
+    ![image](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/9c7e85bb-3e9c-4b0a-b011-1c6bf19c76de)
+  
+    click on Add authentication key.
+
 
   
 
