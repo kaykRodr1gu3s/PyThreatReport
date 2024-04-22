@@ -5,8 +5,10 @@
 + 1 - [Overview](#overview)
 + 2 - [Requirements](#requirements)
 + 3 - [Instalation](#instalation)
-+ 4 - [Misp on Docker configuration](#misp-on-docker-configuration) 
-
++ 4 - [Misp on Docker configuration](#misp-on-docker-configuration)
++ 5 - [abuseipdb Api-key](#abuseipdb)
++ 6 - [Executing python code](#executing-python-code)
++ 7 - [MISP Event Overview](#misp-event-overview)
 
 ### Overview
 
@@ -103,12 +105,72 @@
 
     For you create a Api key, go to Administration > list User on action section, go to view. When click on view option, you will scroll down and click on auth key.  
 
+    
     ![image](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/9c7e85bb-3e9c-4b0a-b011-1c6bf19c76de)
-  
+
     click on Add authentication key.
 
 
+    + Taxonomies
+
+      For you add taxonomies on your event , you need to add the taxonomies, for add go to Event Actions > List Taxonomies. When you click , you will see a search bar o top right, enter with thr tlp value, click on required and enable
+      
+      ![Captura de tela 2024-04-22 095543](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/09259303-6d96-4aeb-8c45-65f8088392f5)
+
+      For enable all tpl taxonomiesback to where you was and click on "enable all"
+      
+      ![Captura de tela 2024-04-22 101310](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/a3892372-2d25-46c6-b845-79324df248ea)
+
+
+### Abuseipdb
+
+  For you get a [abuseipdb](https://www.abuseipdb.com/), you need to [create a account](https://www.abuseipdb.com/pricing) or [login](https://www.abuseipdb.com/login). When you create your account go to  API section
   
+  ![image](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/de0486fa-08af-4bd9-9bd1-27908ca7a75a)
+
+  copy the API
+
+
+
+### Executing python code
+  On your code go to [main code](https://github.com/kaykRodr1gu3s/PyThreatReport/blob/main/main.py) and put your api key that you collect.
+
+  
+  
+  ![Captura de tela 2024-04-22 005338](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/af8ba11f-c33d-4619-863c-e861dcfab11a)
+
+
+
+  When put your APIs on the code, just need to execute the code.
+
+
+
+#### MISP Event Overview
+
+
+  For see the event created with the API , go to HOME and click on the event view.
+
+
+  ![Captura de tela 2024-04-22 102624](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/45db339c-4305-4993-bf30-892dc106bfe4)
+
+
+  When open the event, you can see the details about the event, like: UUID, Creator org, Owner org, Threat Level, #Attributes and among other things.
+
+  For analyse the ips analysed on abuseipdb, just scroll down for see the Attributes
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+
+
+
 
 
 
