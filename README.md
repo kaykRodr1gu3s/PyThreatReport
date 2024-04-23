@@ -5,10 +5,13 @@
 + 1 - [Overview](#overview)
 + 2 - [Requirements](#requirements)
 + 3 - [Instalation](#instalation)
-+ 4 - [Misp on Docker configuration](#misp-on-docker-configuration)
-+ 5 - [abuseipdb Api-key](#abuseipdb)
-+ 6 - [Executing python code](#executing-python-code)
-+ 7 - [MISP Event Overview](#misp-event-overview)
++ 4 - [Python libraries](#python-libraries)
++ 5 - [Misp on Docker configuration](#misp-on-docker-configuration)
++ 6 - [abuseipdb Api-key](#abuseipdb)
++ 7 - [Executing python code](#executing-python-code)
++ 8 - [MISP Event Overview](#misp-event-overview)
++ 9 - [Contribution](#contribution)
++ 10 - [Contact](#contact)
 
 ### Overview
 
@@ -75,8 +78,15 @@
     git clone https://github.com/misp/misp-docker
     ```
 
+### Python libraries
 
+  copy and paste this commands
 
+  ```nano
+  pip install requests
+  pip install pymisp
+  ```
+  
 
 ### Misp on Docker configuration
   After that you create your Linux enviroment and configure with your credencial, let's execute your misp on docker!
@@ -165,7 +175,7 @@
 
 
 
-#### Contribution
+### Contribution
 
    1. Fork the repository.
    2. Create a branch for your contribution: `git checkout -b feature-nova`.
@@ -174,7 +184,7 @@
    5. Open a pull request.
 
 
-#### Contact
+### Contact
 
 - Linkedin: [Kayk Rodrigues](https://www.linkedin.com/in/kayk-rodrigues-504a03273)
 
