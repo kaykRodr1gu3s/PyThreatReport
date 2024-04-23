@@ -154,9 +154,29 @@
   ![Captura de tela 2024-04-22 102624](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/45db339c-4305-4993-bf30-892dc106bfe4)
 
 
-  When open the event, you can see the details about the event, like: UUID, Creator org, Owner org, Threat Level, #Attributes and among other things.
+  When open the event, you can see the details about the event, like: UUID, Creator org, Owner org, Threat Level, #Attributes and other things.
 
-  For analyse the ips analysed on abuseipdb, just scroll down for see the Attributes
+  For analyse the ips analysed on abuseipdb, just scroll down for see the attributes added
+
+  ![image](https://github.com/kaykRodr1gu3s/PyThreatReport/assets/110197812/d29819c7-2aaa-445c-9606-758b89fea2eb)
+
+
+  The search on [abuseIPDB](https://www.abuseipdb.com/) about the ips, is located on Comment coloum.
+
+
+
+#### Contribution
+
+   1. Fork the repository.
+   2. Create a branch for your contribution: `git checkout -b feature-nova`.
+   3. Make the desired changes and commit: `git commit -m "Add new functionality"`.
+   4. Push to your branch: `git push origin new-feature`.
+   5. Open a pull request.
+
+
+#### Contact
+
+- Linkedin: [Kayk Rodrigues](https://www.linkedin.com/in/kayk-rodrigues-504a03273)
 
   
   
@@ -174,4 +194,4 @@
 
 
 
-####
+#### 
