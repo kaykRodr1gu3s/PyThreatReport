@@ -26,4 +26,3 @@ def hashes():
         else:
             hash_list.append(line.replace("\n", ""))
         
-print(hashes())
