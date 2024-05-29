@@ -23,6 +23,7 @@ class abuseip_api():
 
         for ip in ip_list:
             def query(function):
+                    print(ip)
                     query = {
                     'ipAddress': ip,
                     'maxAgeInDays': '90'

@@ -1,8 +1,16 @@
 import pymisp
 
 
-import Tools.abuseipdb as abuseipdb
-from Tools import serpro_ip
+import Tools.analyzer.abuseipdb as abuseipdb
+from class_base import Datas
+import Tools.Datas.ips as serpro_ips
+
+
+
+class Ips(Datas):
+    def __init__(self, datas):
+        self.datas = datas
+
 
 
 class Misp:
@@ -13,11 +21,12 @@ class Misp:
         self.misp_verify_cert = False
 
 
-    def misp_event_creator(self, ips: list, abuseip: list):
+    def misp_event_creator(self, ips_datas):
         """
         This function will upload the datas to the misp utilizng the API.
 
         """
+
         misp = pymisp.ExpandedPyMISP(self.misp_endpoint, self.misp_api, self.misp_verify_cert)
         event = pymisp.MISPEvent()
 
@@ -27,28 +36,21 @@ class Misp:
         event.distribution = "3"
         event.add_tag('tlp:green')
         
-        for key, ip in enumerate(ips):
-            
-            ips_infos = abuseip[key]
-            event.add_attribute("ip-dst", ip, comment=f"Ip: {ips_infos['Ip address']}\nDomain: {ips_infos['domain']}\nCountry Code: {ips_infos['country Code']}\nInternet service provider: {ips_infos['isp']}\nUsage type: {ips_infos['usage Type']}\n\nis white listed: {ips_infos['is white listed']}\nabuse Confidence Score: {ips_infos['abuse Confidence Score']}\nis tor: {ips_infos['is Tor']}\ntotal reports: {ips_infos['total Reports']}\nnum Distinct Users: {ips_infos['num Distinct Users']}", disable_correlation=False)
+        for key, ip in enumerate(ips_datas):
+            ip_datas = ips_datas[key]
+            print(ip_datas['Ip address'])
+
+            event.add_attribute("ip-dst", ip, comment=f"Ip: {ip_datas['Ip address']}\nDomain: {ip_datas['domain']}\nCountry Code: {ip_datas['country Code']}\nInternet service provider: {ip_datas['isp']}\nUsage type: {ip_datas['usage Type']}\n\nis white listed: {ip_datas['is white listed']}\nabuse Confidence Score: {ip_datas['abuse Confidence Score']}\nis tor: {ip_datas['is Tor']}\ntotal reports: {ip_datas['total Reports']}\nnum Distinct Users: {ip_datas['num Distinct Users']}", disable_correlation=False)
             
 
         event.published = True
         misp.add_event(event)
 
+ 
+ips = Ips(serpro_ips.serpro_ip_tracker.ip_tracker())
 
-# The serpro is a code imported  from Tools folder.
-ips = serpro_ip.serpro_ip_tracker()
-ips = ips.ip_tracker()
+abuseip = abuseipdb.abuseip_api()
+abuseip.search(ips.datas)
 
-
-# The abuseipdb is a code imported from Tools folder
-abuseip = abuseipdb.abuseip_api("your abusedb API")
-abuseip_datas = abuseip.search(ips)
-
-
-#initialing the Misp class with the arguments passed
-misp = Misp("Your misp API")
-misp.misp_event_creator(ips, abuseip_datas)
-
-
+misp = Misp("MISP API")
+misp.misp_event_creator(abuseip.search(ips.datas))

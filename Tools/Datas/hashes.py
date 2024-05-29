@@ -1,8 +1,5 @@
-import os 
-
 class Hashes:
     def __init__(self, file):
-        os.chdir("Tools\\Datas")
         self.file = open(file)
 
     def __iter__(self):
@@ -21,8 +18,9 @@ class Hashes:
         
 
 def hashes():
+
     hash_list = []
-    for line in Hashes("hashes.txt"):
+    for line in Hashes("Tools\\Datas\\hashes.txt"):
         if len(hash_list) == 500:
             return hash_list
             

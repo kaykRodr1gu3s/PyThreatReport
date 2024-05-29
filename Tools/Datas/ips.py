@@ -5,8 +5,8 @@ class serpro_ip_tracker:
     This class will collect all ips on https://s3.i02.estaleiro.serpro.gov.br/blocklist/blocklist.txt
     
     """
-    @staticmethod
-    def ip_tracker():
+    @classmethod
+    def ip_tracker(cls):
         """
         This folder will return a list of ips 
         """
@@ -19,9 +19,5 @@ class serpro_ip_tracker:
 
         for ip in ips_list:
             list_ip.append(ip)            
-            if len(list_ip) == 20:
-                return list_ip
-
-
-
-print(serpro_ip_tracker.ip_tracker())
+           
+        return list_ip
