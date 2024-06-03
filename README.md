@@ -75,6 +75,7 @@
   + [Misp images](https://github.com/misp/misp-docker) to build on container.
     ```git
     mkdir documents
+    cd documents
     git clone https://github.com/misp/misp-docker
     ```
 
