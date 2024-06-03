@@ -1,4 +1,4 @@
-class Hashes:
+class Hashes_class:
     def __init__(self, file):
         self.file = open(file)
 
@@ -17,16 +17,14 @@ class Hashes:
             raise StopIteration
         
 
-def hashes():
+def hashes_function():
 
     hash_list = []
-    for line in Hashes("Tools\\Datas\\hashes.txt"):
-        if len(hash_list) == 500:
+    for line in Hashes_class("Tools\\Datas\\full-hash-md5-aa.txt"):
+        if len(hash_list) == 10:
             return hash_list
             
         else:
             hash_list.append(line.replace("\n", ""))
+
         
-
-
-print(hashes())
