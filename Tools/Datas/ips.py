@@ -19,5 +19,5 @@ class serpro_ip_tracker:
 
         for ip in ips_list:
             list_ip.append(ip)            
-           
-        return list_ip
+            if len(list_ip) == 10:
+                return list_ip
