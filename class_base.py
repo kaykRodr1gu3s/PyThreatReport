@@ -11,16 +11,12 @@ class analyzer_base(ABC):
     def search(self):
         pass
 
-
-
 class Datas(ABC):
     def __init__(self, datas):
         self.datas = datas
         """
         The datas is the ips or hash value
         """
-
-# class Datas(ABC):
 
 
 
