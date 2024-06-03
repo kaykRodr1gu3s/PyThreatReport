@@ -1,14 +1,14 @@
 import requests
-# from class_base import analyzer_base
+from class_base import analyzer_base
 
 
 
-class abuseip_api():
+class abuseip_api(analyzer_base):
     """
     This class will search on https://www.abuseipdb.com/ the ips reported utilizing the API.
     """
 
-    def __init__(self, API="ABUSEIPDB API"):
+    def __init__(self, API="API"):
         self.endpoint = "https://api.abuseipdb.com/api/v2/check"
         self.header = {
                 'Accept': 'application/json',
