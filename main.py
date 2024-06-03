@@ -1,16 +1,18 @@
-import pymisp
-
+from pymisp import ExpandedPyMISP, MISPEvent
 
 import Tools.analyzer.abuseipdb as abuseipdb
 from class_base import Datas
-import Tools.Datas.ips as serpro_ips
-
+import Tools.Datas.ips as ip_list
 
 
 class Ips(Datas):
     def __init__(self, datas):
         self.datas = datas
 
+
+class Hashes(Datas):
+    def __init__(self, datas):
+        self.datas = datas
 
 
 class Misp:
@@ -21,36 +23,34 @@ class Misp:
         self.misp_verify_cert = False
 
 
-    def misp_event_creator(self, ips_datas):
+    def misp_event_creator_IPS(self, ips_datas):
         """
-        This function will upload the datas to the misp utilizng the API.
-
+        This function will upload the datas to the MISP using the API.
         """
 
-        misp = pymisp.ExpandedPyMISP(self.misp_endpoint, self.misp_api, self.misp_verify_cert)
-        event = pymisp.MISPEvent()
+        misp = ExpandedPyMISP(self.misp_endpoint, self.misp_api, self.misp_verify_cert)
+        event = MISPEvent()
 
         event.info = "Observed Malicious IP Activity"
-        event.analysis = "2"
-        event.threat_level_id = "1"
-        event.distribution = "3"
+        event.analysis = 2
+        event.threat_level_id = 1
+        event.distribution = 3
         event.add_tag('tlp:green')
-        
-        for key, ip in enumerate(ips_datas):
-            ip_datas = ips_datas[key]
-            print(ip_datas['Ip address'])
 
-            event.add_attribute("ip-dst", ip, comment=f"Ip: {ip_datas['Ip address']}\nDomain: {ip_datas['domain']}\nCountry Code: {ip_datas['country Code']}\nInternet service provider: {ip_datas['isp']}\nUsage type: {ip_datas['usage Type']}\n\nis white listed: {ip_datas['is white listed']}\nabuse Confidence Score: {ip_datas['abuse Confidence Score']}\nis tor: {ip_datas['is Tor']}\ntotal reports: {ip_datas['total Reports']}\nnum Distinct Users: {ip_datas['num Distinct Users']}", disable_correlation=False)
-            
+        for ip_data in ips_datas:
+            event.add_attribute(type='ip-dst', value=ip_data['Ip address'], comment=f"Ip: {ip_data['Ip address']}\nCountry Code: {ip_data['country Code']}\nInternet service provider: {ip_data['isp']}\nUsage type: {ip_data['usage Type']}\n\nIs white listed: {ip_data['is white listed']}\nAbuse Confidence Score: {ip_data['abuse Confidence Score']}\nIs Tor: {ip_data['is Tor']}\nTotal reports: {ip_data['total Reports']}\nNum Distinct Users: {ip_data['num Distinct Users']}", disable_correlation=False)
 
         event.published = True
         misp.add_event(event)
 
- 
-ips = Ips(serpro_ips.serpro_ip_tracker.ip_tracker())
 
-abuseip = abuseipdb.abuseip_api()
-abuseip.search(ips.datas)
+class misp_uploader:
+    def __init__(self) -> None:
+        self.misp_instance = Misp("misp api")
 
-misp = Misp("MISP API")
-misp.misp_event_creator(abuseip.search(ips.datas))
+    
+    def misp_ips(self):
+        ips = Ips(ip_list.serpro_ip_tracker.ip_tracker())
+        abuseip = abuseipdb.abuseip_api("API abuseipdb")
+        abuseip = abuseip.search(ips.datas)
+        self.misp_instance.misp_event_creator_IPS(abuseip) 
