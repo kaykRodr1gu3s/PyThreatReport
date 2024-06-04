@@ -7,24 +7,41 @@ from Tools.Datas.hashes import hashes_function
 
 
 class hash_analyse(analyzer_base):
-    def __init__(self):
+    """
+    This class will analyse the hashes passed on __init__ method
+    """
+    def __init__(self, API: str):
+        """
+        it Will initialize the class with some attribute 
 
+        Args >>> API from hybrid analysis
+        """
         self.endpoint = "https://hybrid-analysis.com/api/v2/search/hash"
-        self.header = {"accept":"application/json", "api-key": "API", "Content-Type":"application/x-www-form-urlencoded"}
-        self.hashes = hashes_function()
+        self.header = {f"accept":"application/json", "api-key": API, "Content-Type":"application/x-www-form-urlencoded"}
+        self.hashes =  hashes_function()
         self.all_datas = []
         self.hash_content = {}
         self.empty_hash_value = {}
 
     @property
-    def search(self):
+    @staticmethod
+    def search(self) -> list:
+        """
+        This method will request thought api the hybrid analysis and return a json
+
+
+        output >>> list
+        """
         for hash_ in self.hashes:
 
             def query(func):
-    
+                """
+                This decorator will request and parse the datas
+
+                Args >>> dict_keys decorator
+                """
                 req = requests.post(self.endpoint, headers=self.header, data={'hash':hash_}).json()
                 if req:
-                
                     dict_datas = {key:req[0][key] for key in func()}
                     self.hash_content[hash_] = dict_datas 
 
