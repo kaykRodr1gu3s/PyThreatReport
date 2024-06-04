@@ -8,7 +8,7 @@ class abuseip_api(analyzer_base):
     This class will search on https://www.abuseipdb.com/ the ips reported utilizing the API.
     """
 
-    def __init__(self, API="API"):
+    def __init__(self, API: str):
         self.endpoint = "https://api.abuseipdb.com/api/v2/check"
         self.header = {
                 'Accept': 'application/json',
@@ -16,21 +16,27 @@ class abuseip_api(analyzer_base):
                     } 
         self.ips_data = []
     
-    def search(self, ip_list):
+    def search(self, ip_list: list):
         """
         This function will search on https://www.abuseipdb.com/ the datas from each ips passed as argument utilizing the API and save some important datas returned.
         """
 
         for ip in ip_list:
-            def query(function):
-                    print(ip)
-                    query = {
+            def query(function) -> list:
+                    """
+                    This decorator will request and parse the datas in a attribute and append to a list for return 
+
+
+                    output >>> list
+                    """
+                    
+                    queries = {
                     'ipAddress': ip,
                     'maxAgeInDays': '90'
                     }
                 
 
-                    req = requests.get(url=self.endpoint, headers=self.header, params=query)
+                    req = requests.get(url=self.endpoint, headers=self.header, params=queries)
 
                     data = req.json()
                     function(data)
@@ -52,7 +58,6 @@ class abuseip_api(analyzer_base):
                 infos["num Distinct Users"] = data["numDistinctUsers"]
         
                 self.ips_data.append(infos)
-
         return self.ips_data
             
                 
