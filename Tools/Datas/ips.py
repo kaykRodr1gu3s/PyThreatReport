@@ -6,9 +6,9 @@ class serpro_ip_tracker:
     
     """
     @classmethod
-    def ip_tracker(cls):
+    def ip_tracker(cls) -> list:
         """
-        This folder will return a list of ips 
+        This class will return the ip list for be passed as argument to class Ips on main.py
         """
 
         list_ip = []
