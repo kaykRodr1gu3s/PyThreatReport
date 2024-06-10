@@ -1,20 +1,24 @@
 import requests
-from class_base import analyzer_base
+from dotenv import load_dotenv
+from os import getenv
+
+from Tools.analyzer.class_base import analyzer_base
 
 
 
-class abuseip_api(analyzer_base):
+class Abuseip_Api(analyzer_base):
     """
     This class will search on https://www.abuseipdb.com/ the ips reported utilizing the API.
     """
 
-    def __init__(self, API: str):
+    def __init__(self):
+        load_dotenv()
         self.endpoint = "https://api.abuseipdb.com/api/v2/check"
         self.header = {
                 'Accept': 'application/json',
-                'Key': API
+                'Key': getenv("abuseipdb_api")
                     } 
-        self.ips_data = []
+        self.ips_content = {}
     
     def search(self, ip_list: list):
         """
@@ -22,7 +26,7 @@ class abuseip_api(analyzer_base):
         """
 
         for ip in ip_list:
-            def query(function) -> list:
+            def query(func) -> list:
                     """
                     This decorator will request and parse the datas in a attribute and append to a list for return 
 
@@ -35,31 +39,13 @@ class abuseip_api(analyzer_base):
                     'maxAgeInDays': '90'
                     }
                 
+                    req = requests.get(url=self.endpoint, headers=self.header, params=queries).json()
+                    dict_datas = {key:req["data"][key] for key in func()}
+                    self.ips_content[ip] = dict_datas
 
-                    req = requests.get(url=self.endpoint, headers=self.header, params=queries)
-
-                    data = req.json()
-                    function(data)
-            
             @query
-            def abuseip_datas(*args):
-                infos = {}
-                data = args[0]['data']
-                
-                infos["Ip address"] = data["ipAddress"]
-                infos["is white listed"] = data["isWhitelisted"]
-                infos["abuse Confidence Score"] = data["abuseConfidenceScore"]
-                infos["country Code"] = data["countryCode"]
-                infos["usage Type"] = data["usageType"]
-                infos["isp"] = data["isp"]
-                infos["domain"] = data["domain"]
-                infos["is Tor"] = data["isTor"]
-                infos["total Reports"] = data["totalReports"]
-                infos["num Distinct Users"] = data["numDistinctUsers"]
-        
-                self.ips_data.append(infos)
-        return self.ips_data
-            
-                
-
-
+            def dict_keys():
+                keys = ["ipAddress", "isWhitelisted", "abuseConfidenceScore", "countryCode", "usageType", "isp", "domain", "isTor", "totalReports", "numDistinctUsers"]
+                return keys
+               
+        return self.ips_content
