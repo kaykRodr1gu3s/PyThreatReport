@@ -1,38 +1,32 @@
 import requests
-from class_base import analyzer_base
-from Tools.Datas.hashes import hashes_function
+from os import getenv
+from dotenv import load_dotenv
 
-
-
-
+from Tools.analyzer.class_base import analyzer_base
 
 class hash_analyse(analyzer_base):
     """
     This class will analyse the hashes passed on __init__ method
     """
-    def __init__(self, API: str):
+    def __init__(self):
         """
         it Will initialize the class with some attribute 
 
         Args >>> API from hybrid analysis
         """
         self.endpoint = "https://hybrid-analysis.com/api/v2/search/hash"
-        self.header = {f"accept":"application/json", "api-key": API, "Content-Type":"application/x-www-form-urlencoded"}
-        self.hashes =  hashes_function()
+        self.header = {f"accept":"application/json", "api-key": getenv("hybrid_analysis_api"), "Content-Type":"application/x-www-form-urlencoded"}
         self.all_datas = []
         self.hash_content = {}
         self.empty_hash_value = {}
 
-    @property
-    @staticmethod
-    def search(self) -> list:
+    def search(self, hash_list: list) -> list:
         """
         This method will request thought api the hybrid analysis and return a json
 
-
         output >>> list
         """
-        for hash_ in self.hashes:
+        for hash_ in hash_list:
 
             def query(func):
                 """
@@ -45,10 +39,8 @@ class hash_analyse(analyzer_base):
                     dict_datas = {key:req[0][key] for key in func()}
                     self.hash_content[hash_] = dict_datas 
 
-
                 else:
                     self.empty_hash_value[hash_] = None 
-
 
             @query  
             def dict_keys(): 
