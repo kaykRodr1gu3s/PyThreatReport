@@ -1,4 +1,6 @@
 from pymisp import ExpandedPyMISP, MISPEvent
+from dotenv import load_dotenv
+from os import getenv
 
 import Tools.analyzer.abuseipdb as abuseipdb
 from class_base import Datas
@@ -6,6 +8,10 @@ import Tools.Datas.ips as ip_list
 from Tools.analyzer.hashes_analyzer import hash_analyse
 
 
+load_dotenv()
+misp_api = getenv("misp_api")
+abuseipdb_api = getenv("abuseipdb_api")
+hybrid_analysis_api = getenv("hybrid_analysis_api")
 
 
 class Ips(Datas):
@@ -119,15 +125,15 @@ class misp_uploader:
         hash_list = Hashes(hashes.all_datas)
         self.misp_instance.misp_event_creator_HASH(hash_list.datas)
 
-def misp(obj):
-    """
-    This function will execute the misp_hash and misp_ip method from the class misp uploader
+# def misp(obj):
+#     """
+#     This function will execute the misp_hash and misp_ip method from the class misp uploader
 
-    Arg >>> misp_uploader() 
+#     Arg >>> misp_uploader() 
 
-    """
-    obj.misp_ips()
-    obj.misp_hash()
+#     """
+#     obj.misp_ips()
+#     obj.misp_hash()
 
-misp_datas= misp(misp_uploader())
+# misp_datas= misp(misp_uploader())
 
