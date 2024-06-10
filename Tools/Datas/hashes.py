@@ -19,7 +19,6 @@ class Hashes_class:
         except:
             raise StopIteration
         
-
 def hashes_function():
     """
     This function will return the quantity selected of ips
