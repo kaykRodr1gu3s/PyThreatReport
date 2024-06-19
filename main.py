@@ -1,19 +1,54 @@
 from pymisp import ExpandedPyMISP, MISPEvent
 from dotenv import load_dotenv
 from os import getenv
+from datetime import datetime
+import pytz
+
 
 import Tools.analyzer.abuseipdb as abuseipdb
 from Tools.analyzer.hashes_analyzer import hash_analyse
-
 import Tools.Datas.ips as ip_list
 import Tools.Datas.hashes as hash_list
+from Tools.Database.Database import Ip, Hash 
+
+
+
+class consulting_db:
+    def __init__(self):
+        self.ips = []
+        
+        self.date = datetime.now(pytz.timezone("America/Sao_Paulo")).strftime("%d/%m/%Y %I:%M %p")
+        self.data_ips_to_db = []
+
+    def ip_info(self, datas):
+
+        def consulter():
+            ips_in_db = []
+            for c in  ips.select_data():
+                ips_in_db.append(dict(c)["Ip"])
+            return ips_in_db       
+             
+        ips =  Ip("ips")
+
+        ips_in_db = consulter()
+
+        for ip in datas:
+            if ip not in ips_in_db:
+                self.ips.append(datas[ip]['ipAddress'])
+                self.data_ips_to_db.append((datas[ip]['ipAddress'], datas[ip]['abuseConfidenceScore'], self.date))
+
+        def insert_value():
+            ips.inserting_value(self.data_ips_to_db)
+
+        insert_value()
+
 
 
 class Misp:
     """
-    This class will connect with misp utilizing the library pymisp and report ips and hashes to misp
+    This class will connect with misp utilizing the library pymisp and report ips and hashes
     """
-    def __init__(self):
+    def __init__(self, ips_in_db):
         load_dotenv()
         ips_list = abuseipdb.Abuseip_Api()
         hashes = hash_analyse()
@@ -23,10 +58,12 @@ class Misp:
         self.misp_verify_cert = False
         self.ips_datas = ips_list.search(ip_list.serpro_ip_tracker.ip_tracker())
         self.hashes_list = hashes.search(hash_list.hashes_function()) 
+        self.ips_in_db = ips_in_db
+
 
     def misp_event_creator(self):
         """
-        This function will create the events on mips
+        This function will create the events on misp
         """
         def ips():
             """
@@ -40,12 +77,14 @@ class Misp:
             event.threat_level_id = 1
             event.distribution = 3
             event.add_tag('tlp:green')
-
-            for ip_data in self.ips_datas:
-                event.add_attribute(type='ip-dst', value=ip_data, comment=f"Ip: {self.ips_datas[ip_data]['ipAddress']}\nCountry Code: {self.ips_datas[ip_data]['countryCode']}\nInternet service provider: {self.ips_datas[ip_data]['isp']}\nUsage type: {self.ips_datas[ip_data]['usageType']}\n\nIs white listed: {self.ips_datas[ip_data]['isWhitelisted']}\nAbuse Confidence Score: {self.ips_datas[ip_data]['abuseConfidenceScore']}\nIs Tor: {self.ips_datas[ip_data]['isTor']}\nTotal reports: {self.ips_datas[ip_data]['totalReports']}\nNum Distinct Users: {self.ips_datas[ip_data]['numDistinctUsers']}", disable_correlation=False)
-            event.published = True
-            misp.add_event(event)
-
+            if self.ips_in_db:
+                for ip in self.ips_in_db:
+                    event.add_attribute(type='ip-dst', value=self.ips_datas[ip]['ipAddress'], comment=f"Ip: {self.ips_datas[ip]['ipAddress']}\nCountry Code: {self.ips_datas[ip]['countryCode']}\nInternet service provider: {self.ips_datas[ip]['isp']}\nUsage type: {self.ips_datas[ip]['usageType']}\n\nIs white listed: {self.ips_datas[ip]['isWhitelisted']}\nAbuse Confidence Score: {self.ips_datas[ip]['abuseConfidenceScore']}\nIs Tor: {self.ips_datas[ip]['isTor']}\nTotal reports: {self.ips_datas[ip]['totalReports']}\nNum Distinct Users: {self.ips_datas[ip]['numDistinctUsers']}", disable_correlation=False)
+    
+                event.published = True
+                misp.add_event(event)
+            else:
+                print("ta vazio")
         def hashes():
             
             misp = ExpandedPyMISP(self.misp_endpoint, self.misp_api, self.misp_verify_cert)
@@ -67,9 +106,17 @@ class Misp:
                 event.add_attribute(type='md5', value=hash_ ,comment="Empty", disable_correlation=False)
 
             event.published = True
-            misp.add_event(event)
+            misp.add_event(event)           
         ips()
         hashes()
 
-misp = Misp()
-misp.misp_event_creator()
+
+ips_list = ip_list.serpro_ip_tracker.ip_tracker()
+abuseipdb = abuseipdb.Abuseip_Api()
+datas_result = abuseipdb.search(ips_list)
+
+db= consulting_db()
+db.ip_info(datas_result)
+
+# misp = Misp(a1.ips)
+# misp.misp_event_creator()
