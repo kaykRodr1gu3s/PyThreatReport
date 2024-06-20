@@ -15,7 +15,26 @@ class consulting_db:
         self.date = datetime.now(pytz.timezone("America/Sao_Paulo")).strftime("%d/%m/%Y %I:%M %p")
         self.data_ips_to_db = []
         self.class_instance = Ips_Db()
- 
+    
+    
+    def consult_db(self, ips):
+        """
+        This method consult the database , if the ip is present on the database, the ip won't uploaded to misp.
+
+        ips >>> serpro_ip_tracker
+        """
+        ips_in_db = []
+        ip_to_search = []
+        
+        for ip in self.class_instance.select_data():
+            ips_in_db.append(dict(ip)["Ip"])
+        
+        for ip in ips:
+            if ip not in ips_in_db:
+                ip_to_search.append(ip)
+        print(f"The ips : {ip_to_search} will uploaded")
+        return ip_to_search
+
     def ip_info(self, datas):
         """
         This method will consult your database and verify if have the ip address in your databse.
@@ -34,12 +53,11 @@ class consulting_db:
         ips_in_db = consulter()
         
         for ip in datas:
+
             if ip not in ips_in_db:
                 self.ips.append(datas[ip]['ipAddress'])
                 self.data_ips_to_db.append((datas[ip]['ipAddress'], datas[ip]['abuseConfidenceScore'], self.date))
-                print(f"nao temos o ip {datas[ip]['ipAddress']}")
-            else:
-                print(f"Temos o ip {ip}")
+
         def insert_value():
             """
             This method will insert the values in the database
@@ -90,12 +108,13 @@ class Misp:
 
         ips()
 
-
-ips_list = ip_list.serpro_ip_tracker.ip_tracker()
-abuseipdb = abuseipdb.Abuseip_Api()
-datas_result = abuseipdb.search(ips_list)
-
 db = consulting_db()
+
+ips_to_search = db.consult_db(ip_list.serpro_ip_tracker.ip_tracker())
+
+abuseipdb = abuseipdb.Abuseip_Api()
+datas_result = abuseipdb.search(ips_to_search)
+
 db.ip_info(datas_result)
 
 misp = Misp(datas_result, db.ips)
