@@ -61,7 +61,7 @@
    + [Python](https://python.org) for be able to execute python codes.
 
    
-   +[Sqlite](https://sqlite.org/download.html) for be able to create and consult the database
+   + [Sqlite](https://sqlite.org/download.html) for be able to create and consult the database
    
   #### Linux
    On linux enviroment you need to install some software:
