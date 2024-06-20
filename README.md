@@ -15,12 +15,12 @@
 
 ### Overview
 
-  This Python-based automation tool streamlines the process of collecting, analyzing, and disseminating threat intelligence data. Leveraging the capabilities of the MISP platform, AbuseIPDB API, and Serpro services, the project fetches malicious IP            addresses from a designated URL, enriches this data with insights from AbuseIPDB, and seamlessly integrates the enriched Indicators of Compromise (IoCs) into MISP for comprehensive threat intelligence management.
+  This project is an automation that collects IP addresses and queries the reputation of each respective IP, saving this reputation in a database and uploading it to MISP. IPs are stored in a database using SQLite. If the respective IP is already present in the table, it will not be queried in AbuseIPDB and will be discarded. If the IP is not in the database, its reputation will be queried using AbuseIPDB. After these processes, the IPs and their reputations will be sent to MISP using the PyMISP library and its API.
 
 
 ### Requirements
 
-  For this project we need to install some software and python libraries. they are:
+  For this project we need to install some software and python libraries.
   
   #### Windows
   + Docker
@@ -28,20 +28,20 @@
   + git
   + misp
   + python
- 
+  + sqlite
 
   #### Linux
 
   + Docker
   + misp
   + git
- 
+  + sqlite
 
 
 
 ### Instalation
-  On instalation you can use linux and windows, i'm going to show how to install onm this both operation system.
-
+  On instalation you can use linux and windows.
+  
 
   #### Windows
    On windows you need to install some software:
@@ -60,7 +60,9 @@
    
    + [Python](https://python.org) for be able to execute python codes.
 
- 
+   
+   +[Sqlite](https://sqlite.org/download.html) for be able to create and consult the database
+   
   #### Linux
    On linux enviroment you need to install some software:
 
@@ -72,6 +74,9 @@
     ```
     aot-get install git
     ```
+    
+  + [SQLite](https://sqlite.org/download.html) ```sudo apt-get install sqlite3```
+  
   + [Misp images](https://github.com/misp/misp-docker) to build on container.
     ```git
     mkdir documents
@@ -83,11 +88,16 @@
 
   copy and paste this commands
 
-  ```nano
-  pip install requests
-  pip install pymisp
   ```
-  
+  pip install pipenv
+
+  python3 -m pipenv install
+  pip install python-dotenv
+
+  ```
+### API Configuration
+
+  To configure the API just go to [.env](https://github.com/kaykRodr1gu3s/PyThreatReport/blob/main/Tools/.env) file. When open the the file, just past the api on in the correct variable
 
 ### Misp on Docker configuration
   After that you create your Linux enviroment and configure with your credencial, let's execute your misp on docker!
